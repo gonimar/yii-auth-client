@@ -19,7 +19,7 @@ use Yiisoft\Yii\AuthClient\Exception\InvalidConfigException;
 /**
  * AuthChoice prints buttons for authentication via various auth clients.
  * It opens a popup window for the client authentication process.
- * By default this widget relies on presence of {@see \Yiisoft\Yii\AuthClient\Collection} among application components
+ * By default, this widget relies on presence of {@see \Yiisoft\Yii\AuthClient\Collection} among application components
  * to get auth clients information.
  *
  * Example:
@@ -86,7 +86,7 @@ final class AuthChoice extends Widget
     /**
      * @var string route name for the external clients authentication URL.
      */
-    private string $authRoute = '';
+    private string $authRoute;
     /**
      * @var AuthClientInterface[] auth providers list.
      */
@@ -165,10 +165,10 @@ final class AuthChoice extends Widget
     {
         $items = [];
         foreach ($this->getClients() as $externalService) {
-            $items[] = Html::tag('li', $this->clientLink($externalService));
+            $items[] = Html::tag('li', $this->clientLink($externalService))->encode(false);
         }
 
-        return Html::tag('ul', implode('', $items), ['class' => 'auth-clients'])->render();
+        return Html::tag('ul', implode('', $items), ['class' => 'auth-clients'])->encode(false)->render();
     }
 
     /**
