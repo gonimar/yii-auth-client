@@ -86,7 +86,7 @@ final class AuthChoice extends Widget
     /**
      * @var string route name for the external clients authentication URL.
      */
-    private string $authRoute;
+    private string $authRoute = '';
     /**
      * @var AuthClientInterface[] auth providers list.
      */
