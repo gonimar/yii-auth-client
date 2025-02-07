@@ -224,7 +224,7 @@ final class AuthChoice extends Widget
                 }
             }
 
-            return Html::a($text, $this->createClientUrl($client), $htmlOptions)->render();
+            return Html::a($text, $this->createClientUrl($client), $htmlOptions)->encode(false)->render();
         }
 
         $widgetConfig = $viewOptions['widget'];
