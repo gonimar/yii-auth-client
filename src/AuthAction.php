@@ -13,6 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Http\Status;
+use Yiisoft\Router\CurrentRoute;
 use Yiisoft\View\Exception\ViewNotFoundException;
 use Yiisoft\View\WebView;
 use Yiisoft\Yii\AuthClient\Exception\InvalidConfigException;
@@ -54,11 +55,6 @@ use Yiisoft\Yii\AuthClient\Exception\NotSupportedException;
 final class AuthAction implements MiddlewareInterface
 {
     public const AUTH_NAME = 'auth_displayname';
-    /**
-     * @var Collection
-     * It should point to {@see Collection} instance.
-     */
-    private Collection $clientCollection;
     /**
      * @var string name of the GET param, which is used to passed auth client id to this action.
      * Note: watch for the naming, make sure you do not choose name used in some auth protocol.
@@ -111,20 +107,18 @@ final class AuthAction implements MiddlewareInterface
      * @var string the redirect url after unsuccessful authorization (e.g. user canceled).
      */
     private string $cancelUrl;
-    private ResponseFactoryInterface $responseFactory;
-    private Aliases $aliases;
-    private WebView $view;
 
     public function __construct(
-        Collection $clientCollection,
-        Aliases $aliases,
-        WebView $view,
-        ResponseFactoryInterface $responseFactory
+        /**
+         * @var Collection
+         * It should point to {@see Collection} instance.
+         */
+        private Collection $clientCollection,
+        private Aliases $aliases,
+        private WebView $view,
+        private ResponseFactoryInterface $responseFactory,
+        private CurrentRoute $currentRoute,
     ) {
-        $this->clientCollection = $clientCollection;
-        $this->responseFactory = $responseFactory;
-        $this->aliases = $aliases;
-        $this->view = $view;
     }
 
     /**
@@ -153,7 +147,7 @@ final class AuthAction implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $clientId = $request->getAttribute($this->clientIdGetParamName);
+        $clientId = $this->currentRoute->getArgument($this->clientIdGetParamName);
         if (!empty($clientId)) {
             if (!$this->clientCollection->hasClient($clientId)) {
                 return $this->responseFactory->createResponse(Status::NOT_FOUND, "Unknown auth client '{$clientId}'");
