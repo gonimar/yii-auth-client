@@ -205,4 +205,9 @@ final class OAuthToken
     {
         return $this->createTimestamp;
     }
+
+    public function setTokenParamKey(string $tokenParamKey): void
+    {
+        $this->tokenParamKey = $tokenParamKey;
+    }
 }

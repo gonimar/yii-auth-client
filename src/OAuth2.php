@@ -123,6 +123,7 @@ abstract class OAuth2 extends OAuth
      * @param array $params additional request params.
      *
      * @return OAuthToken access token.
+     * @throws JsonException
      */
     public function fetchAccessToken(
         ServerRequestInterface $incomingRequest,
@@ -133,8 +134,8 @@ abstract class OAuth2 extends OAuth
             $authState = $this->getState('authState');
             $queryParams = $incomingRequest->getQueryParams();
             $bodyParams = $incomingRequest->getParsedBody();
-            $incomingState = $queryParams['state'] ?? $bodyParams['state'] ?? null;
-            if ($incomingState !== null || empty($authState) || strcmp($incomingState, $authState) !== 0) {
+            $incomingState = $queryParams['state'] ?? $bodyParams['state'] ?? '';
+            if ($incomingState === '' || empty($authState) || strcmp($incomingState, $authState) !== 0) {
                 throw new InvalidArgumentException('Invalid auth state parameter.');
             }
             $this->removeState('authState');
@@ -154,7 +155,7 @@ abstract class OAuth2 extends OAuth
 
         $token = $this->createToken(
             [
-                'setParams' => [Json::decode($response->getBody()->getContents())],
+                'setParams()' => [Json::decode($response->getBody()->getContents())],
             ]
         );
         $this->setAccessToken($token);
@@ -190,7 +191,7 @@ abstract class OAuth2 extends OAuth
      */
     protected function createToken(array $tokenConfig = []): OAuthToken
     {
-        $tokenConfig['tokenParamKey'] = 'access_token';
+        $tokenConfig['setTokenParamKey()'] = 'access_token';
 
         return parent::createToken($tokenConfig);
     }
@@ -228,7 +229,7 @@ abstract class OAuth2 extends OAuth
 
         $token = $this->createToken(
             [
-                'setParams' => [Json::decode($response->getBody()->getContents())],
+                'setParams()' => [Json::decode($response->getBody()->getContents())],
             ]
         );
         $this->setAccessToken($token);
@@ -268,7 +269,7 @@ abstract class OAuth2 extends OAuth
 
         $token = $this->createToken(
             [
-                'setParams' => [Json::decode($response->getBody()->getContents())],
+                'setParams()' => [Json::decode($response->getBody()->getContents())],
             ]
         );
         $this->setAccessToken($token);
@@ -311,7 +312,7 @@ abstract class OAuth2 extends OAuth
 
         $token = $this->createToken(
             [
-                'setParams' => [Json::decode($response->getBody()->getContents())],
+                'setParams()' => [Json::decode($response->getBody()->getContents())],
             ]
         );
         $this->setAccessToken($token);
