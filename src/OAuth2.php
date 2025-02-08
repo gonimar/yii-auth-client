@@ -191,7 +191,7 @@ abstract class OAuth2 extends OAuth
      */
     protected function createToken(array $tokenConfig = []): OAuthToken
     {
-        $tokenConfig['setTokenParamKey()'] = 'access_token';
+        $tokenConfig['setTokenParamKey()'] = ['access_token'];
 
         return parent::createToken($tokenConfig);
     }

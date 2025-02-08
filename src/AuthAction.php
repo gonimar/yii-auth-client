@@ -249,7 +249,7 @@ final class AuthAction implements MiddlewareInterface
     {
         if (!is_callable($this->cancelCallback)) {
             throw new InvalidConfigException(
-                '"' . self::class . '::$successCallback" should be a valid callback.'
+                '"' . self::class . '::$cancelCallback" should be a valid callback.'
             );
         }
 
@@ -432,5 +432,19 @@ final class AuthAction implements MiddlewareInterface
             default:
                 return $this->responseFactory->createResponse(Status::BAD_REQUEST);
         }
+    }
+
+    public function withSuccessCallback(callable $successCallback): self
+    {
+        $new = clone $this;
+        $this->successCallback = $successCallback;
+        return $new;
+    }
+
+    public function withCancelCallback(callable $cancelCallback): self
+    {
+        $new = clone $this;
+        $this->cancelCallback = $cancelCallback;
+        return $new;
     }
 }
