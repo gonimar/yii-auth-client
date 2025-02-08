@@ -20,7 +20,7 @@ class Google extends OAuth2
 {
     protected string $authUrl = 'https://accounts.google.com/o/oauth2/auth';
     protected string $tokenUrl = 'https://accounts.google.com/o/oauth2/token';
-    protected string $endpoint = 'https://www.googleapis.com/plus/v1';
+    protected string $endpoint = 'https://www.googleapis.com/oauth2/v1';
 
     /**
      * @return string service name.
@@ -40,11 +40,11 @@ class Google extends OAuth2
 
     protected function getDefaultScope(): string
     {
-        return 'profile email';
+        return 'openid profile email';
     }
 
     protected function initUserAttributes(): array
     {
-        return $this->api('people/me', 'GET');
+        return $this->api('/userinfo', 'GET');
     }
 }

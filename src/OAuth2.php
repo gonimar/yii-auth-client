@@ -40,11 +40,11 @@ abstract class OAuth2 extends OAuth
     /**
      * @var string OAuth client ID.
      */
-    protected string $clientId;
+    protected string $clientId = '';
     /**
      * @var string OAuth client secret.
      */
-    protected string $clientSecret;
+    protected string $clientSecret = '';
     /**
      * @var string token request URL endpoint.
      */
@@ -61,11 +61,12 @@ abstract class OAuth2 extends OAuth
 
     public function __construct(
         \Psr\Http\Client\ClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StateStorageInterface $stateStorage,
-        SessionInterface $session,
-        Factory $factory
-    ) {
+        RequestFactoryInterface          $requestFactory,
+        StateStorageInterface            $stateStorage,
+        SessionInterface                 $session,
+        Factory                          $factory
+    )
+    {
         parent::__construct($httpClient, $requestFactory, $stateStorage, $factory);
         $this->session = $session;
     }
@@ -80,8 +81,9 @@ abstract class OAuth2 extends OAuth
      */
     public function buildAuthUrl(
         ServerRequestInterface $incomingRequest,
-        array $params = []
-    ): string {
+        array                  $params = []
+    ): string
+    {
         $defaultParams = [
             'client_id' => $this->clientId,
             'response_type' => 'code',
@@ -127,15 +129,16 @@ abstract class OAuth2 extends OAuth
      */
     public function fetchAccessToken(
         ServerRequestInterface $incomingRequest,
-        string $authCode,
-        array $params = []
-    ): OAuthToken {
+        string                 $authCode,
+        array                  $params = []
+    ): OAuthToken
+    {
         if ($this->validateAuthState) {
             $authState = $this->getState('authState');
             $queryParams = $incomingRequest->getQueryParams();
             $bodyParams = $incomingRequest->getParsedBody();
-            $incomingState = $queryParams['state'] ?? $bodyParams['state'] ?? '';
-            if ($incomingState === '' || empty($authState) || strcmp($incomingState, $authState) !== 0) {
+            $incomingState = $queryParams['state'] ?? $bodyParams['state'] ?? null;
+            if ($incomingState === null || empty($authState) || strcmp($incomingState, $authState) !== 0) {
                 throw new InvalidArgumentException('Invalid auth state parameter.');
             }
             $this->removeState('authState');
@@ -341,10 +344,11 @@ abstract class OAuth2 extends OAuth
      */
     public function authenticateUserJwt(
         string $username,
-        $signature = null,
-        array $options = [],
-        array $params = []
-    ): OAuthToken {
+               $signature = null,
+        array  $options = [],
+        array  $params = []
+    ): OAuthToken
+    {
         if (empty($signature)) {
             $signatureMethod = $this->getSignatureMethod();
         } elseif (is_object($signature)) {

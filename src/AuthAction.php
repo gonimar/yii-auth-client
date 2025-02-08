@@ -97,7 +97,7 @@ final class AuthAction implements MiddlewareInterface
      * @var string name or alias of the view file, which should be rendered in order to perform redirection.
      * If not set - default one will be used.
      */
-    private string $redirectView;
+    private ?string $redirectView = null;
 
     /**
      * @var string the redirect url after successful authorization.
@@ -305,7 +305,7 @@ final class AuthAction implements MiddlewareInterface
         ];
 
         $response = $this->responseFactory->createResponse();
-        $response->getBody()->write($this->view->renderFile($viewFile, $viewData));
+        $response->getBody()->write($this->view->render($viewFile, $viewData));
 
         return $response;
     }
@@ -437,14 +437,14 @@ final class AuthAction implements MiddlewareInterface
     public function withSuccessCallback(array|callable|string $successCallback): self
     {
         $new = clone $this;
-        $this->successCallback = $successCallback;
+        $new->successCallback = $successCallback;
         return $new;
     }
 
     public function withCancelCallback(array|callable|string $cancelCallback): self
     {
         $new = clone $this;
-        $this->cancelCallback = $cancelCallback;
+        $new->cancelCallback = $cancelCallback;
         return $new;
     }
 }
