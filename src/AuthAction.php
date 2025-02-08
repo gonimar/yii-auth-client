@@ -434,14 +434,14 @@ final class AuthAction implements MiddlewareInterface
         }
     }
 
-    public function withSuccessCallback(callable $successCallback): self
+    public function withSuccessCallback(array|callable|string $successCallback): self
     {
         $new = clone $this;
         $this->successCallback = $successCallback;
         return $new;
     }
 
-    public function withCancelCallback(callable $cancelCallback): self
+    public function withCancelCallback(array|callable|string $cancelCallback): self
     {
         $new = clone $this;
         $this->cancelCallback = $cancelCallback;
