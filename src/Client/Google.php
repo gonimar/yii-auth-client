@@ -19,8 +19,8 @@ use Yiisoft\Yii\AuthClient\OAuth2;
 class Google extends OAuth2
 {
     protected string $authUrl = 'https://accounts.google.com/o/oauth2/auth';
-    protected string $tokenUrl = 'https://accounts.google.com/o/oauth2/token';
-    protected string $endpoint = 'https://www.googleapis.com/oauth2/v1';
+    protected string $tokenUrl = 'https://oauth2.googleapis.com/token';
+    protected string $endpoint = 'https://openidconnect.googleapis.com/v1';
 
     /**
      * @return string service name.

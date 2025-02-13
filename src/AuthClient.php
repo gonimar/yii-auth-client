@@ -25,7 +25,7 @@ abstract class AuthClient implements AuthClientInterface
     /**
      * @var array authenticated user attributes.
      */
-    protected array $userAttributes = [];
+    protected ?array $userAttributes = null;
     /**
      * @var array map used to normalize user attributes fetched from external auth service
      * in format: normalizedAttributeName => sourceSpecification
